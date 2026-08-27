@@ -1,5 +1,5 @@
 diff --git a/app/cmd/app/app.go b/app/cmd/app/app.go
-index 2ebfe25..9c7bcfa 100644
+index e770b06..14ec61f 100644
 --- a/app/cmd/app/app.go
 +++ b/app/cmd/app/app.go
 @@ -224,9 +224,9 @@ func main() {
@@ -16,46 +16,51 @@ index 2ebfe25..9c7bcfa 100644
  		}
  	}
 diff --git a/app/cmd/app/app_darwin.m b/app/cmd/app/app_darwin.m
-index 87bc9a3..65fa7dc 100644
+index ca32842..64e0998 100644
 --- a/app/cmd/app/app_darwin.m
 +++ b/app/cmd/app/app_darwin.m
-@@ -77,7 +77,7 @@ static NSBundle *OllamaResourceBundle(void) {
+@@ -440,19 +440,19 @@ static NSImage *ollamaApplicationIcon(void) {
+     [self applyShowAppsInMenu:shouldShowAppsInMenu()];
  
-     // Create status item and menu
-     NSMenu *menu = [[NSMenu alloc] init];
--    [menu addItemWithTitle:@"Settings..."
-+    [menu addItemWithTitle:@"设置..."
+     NSMenuItem *appsMenuItem =
+-        [[NSMenuItem alloc] initWithTitle:@"Open Ollama"
++        [[NSMenuItem alloc] initWithTitle:@"打开 Ollama"
+                                    action:@selector(appsUI)
+                             keyEquivalent:@""];
+     [appsMenuItem setTarget:self];
+     [menu addItem:appsMenuItem];
+ 
+-    [menu addItemWithTitle:@"Settings"
++    [menu addItemWithTitle:@"设置"
                      action:@selector(settingsUI)
               keyEquivalent:@","];
- 
-@@ -90,7 +90,7 @@ static NSBundle *OllamaResourceBundle(void) {
      [menu addItem:[NSMenuItem separatorItem]];
  
-     NSMenuItem *updateAvailable =
+     self.updateAvailableMenuItem =
 -        [[NSMenuItem alloc] initWithTitle:@"An update is available"
 +        [[NSMenuItem alloc] initWithTitle:@"有可用更新"
                                     action:nil
                              keyEquivalent:@""];
-     [updateAvailable setEnabled:NO];
-@@ -98,7 +98,7 @@ static NSBundle *OllamaResourceBundle(void) {
-     [menu addItem:updateAvailable];
+     [self.updateAvailableMenuItem setEnabled:NO];
+@@ -460,7 +460,7 @@ static NSImage *ollamaApplicationIcon(void) {
+     [menu addItem:self.updateAvailableMenuItem];
  
-     NSMenuItem *restartMenuItem =
+     self.restartMenuItem =
 -        [[NSMenuItem alloc] initWithTitle:@"Restart to update"
 +        [[NSMenuItem alloc] initWithTitle:@"重启以更新"
                                     action:@selector(startUpdate)
                              keyEquivalent:@""];
-     [restartMenuItem setTarget:self];
-@@ -107,7 +107,7 @@ static NSBundle *OllamaResourceBundle(void) {
+     [self.restartMenuItem setTarget:self];
+@@ -469,7 +469,7 @@ static NSImage *ollamaApplicationIcon(void) {
  
      [menu addItem:[NSMenuItem separatorItem]];
  
 -    [menu addItemWithTitle:@"Quit Ollama"
 +    [menu addItemWithTitle:@"退出 Ollama"
-                     action:@selector(quit)
+                     action:@selector(requestQuit)
               keyEquivalent:@"q"];
  
-@@ -137,7 +137,7 @@ static NSBundle *OllamaResourceBundle(void) {
+@@ -499,7 +499,7 @@ static NSImage *ollamaApplicationIcon(void) {
                         action:@selector(aboutOllama)
                  keyEquivalent:@""];
      [appMenu addItem:[NSMenuItem separatorItem]];
@@ -64,7 +69,7 @@ index 87bc9a3..65fa7dc 100644
                      action:@selector(settingsUI)
                  keyEquivalent:@","];
      [appMenu addItem:[NSMenuItem separatorItem]];
-@@ -159,7 +159,7 @@ static NSBundle *OllamaResourceBundle(void) {
+@@ -521,7 +521,7 @@ static NSImage *ollamaApplicationIcon(void) {
      NSMenuItem *fileMenuItem = [[NSMenuItem alloc] init];
      NSMenu *fileMenu        = [[NSMenu alloc] initWithTitle:@"File"];
  
@@ -73,7 +78,7 @@ index 87bc9a3..65fa7dc 100644
                                                      action:@selector(newChat)
                                                  keyEquivalent:@"n"];
      [newChatItem setTarget:self];
-@@ -184,7 +184,7 @@ static NSBundle *OllamaResourceBundle(void) {
+@@ -546,7 +546,7 @@ static NSImage *ollamaApplicationIcon(void) {
      [editMenu addItemWithTitle:@"Cut"
                          action:@selector(cut:)
                   keyEquivalent:@"x"];
@@ -83,10 +88,10 @@ index 87bc9a3..65fa7dc 100644
                   keyEquivalent:@"c"];
      [editMenu addItemWithTitle:@"Paste"
 diff --git a/app/cmd/app/app_windows.go b/app/cmd/app/app_windows.go
-index c26b50e..0c1c300 100644
+index a1031f9..e0cf201 100644
 --- a/app/cmd/app/app_windows.go
 +++ b/app/cmd/app/app_windows.go
-@@ -255,12 +255,12 @@ func createLoginShortcut() error {
+@@ -259,12 +259,12 @@ func createLoginShortcut() error {
  			if err != nil {
  				return fmt.Errorf("unable to sync shortcut %s : %w", startupShortcut, err)
  			}
@@ -102,10 +107,10 @@ index c26b50e..0c1c300 100644
  	return nil
  }
 diff --git a/app/cmd/app/webview.go b/app/cmd/app/webview.go
-index f920ee6..a8a3fbc 100644
+index bf02b15..8a6c76b 100644
 --- a/app/cmd/app/webview.go
 +++ b/app/cmd/app/webview.go
-@@ -288,13 +288,13 @@ func (w *Webview) Run(path string) unsafe.Pointer {
+@@ -259,13 +259,13 @@ func (w *Webview) Run(path string) unsafe.Pointer {
  					})
  				}
  
@@ -122,7 +127,7 @@ index f920ee6..a8a3fbc 100644
  				callCallback(directory)
  			}()
  		})
-@@ -322,11 +322,11 @@ func (w *Webview) Run(path string) unsafe.Pointer {
+@@ -293,11 +293,11 @@ func (w *Webview) Run(path string) unsafe.Pointer {
  
  				// Use native multiple file selection with extension filtering
  				filenames, err := dialog.File().
@@ -137,7 +142,7 @@ index f920ee6..a8a3fbc 100644
  					callCallback(nil)
  					return
  				}
-@@ -415,13 +415,13 @@ func (w *Webview) Run(path string) unsafe.Pointer {
+@@ -386,13 +386,13 @@ func (w *Webview) Run(path string) unsafe.Pointer {
  					})
  				}
  
@@ -168,10 +173,10 @@ index d73df2c..8b960ec 100644
  			return
  		}
 diff --git a/app/ui/app/src/api.ts b/app/ui/app/src/api.ts
-index 8490e7c..d9722d6 100644
+index e639052..fe48f31 100644
 --- a/app/ui/app/src/api.ts
 +++ b/app/ui/app/src/api.ts
-@@ -87,7 +87,7 @@ export async function fetchConnectUrl(): Promise<string> {
+@@ -105,7 +105,7 @@ export async function fetchConnectUrl(): Promise<string> {
      }
    }
  
@@ -180,7 +185,7 @@ index 8490e7c..d9722d6 100644
  }
  
  export async function disconnectUser(): Promise<void> {
-@@ -99,7 +99,7 @@ export async function disconnectUser(): Promise<void> {
+@@ -117,7 +117,7 @@ export async function disconnectUser(): Promise<void> {
    });
  
    if (!response.ok) {
@@ -189,7 +194,7 @@ index 8490e7c..d9722d6 100644
    }
  }
  
-@@ -264,7 +264,7 @@ export async function getSettings(): Promise<{
+@@ -360,7 +360,7 @@ export async function getSettings(): Promise<{
  }> {
    const response = await fetch(`${API_BASE}/api/v1/settings`);
    if (!response.ok) {
@@ -198,7 +203,7 @@ index 8490e7c..d9722d6 100644
    }
    const data = await response.json();
    return {
-@@ -284,7 +284,7 @@ export async function updateSettings(settings: Settings): Promise<{
+@@ -380,7 +380,7 @@ export async function updateSettings(settings: Settings): Promise<{
    });
    if (!response.ok) {
      const error = await response.text();
@@ -207,7 +212,7 @@ index 8490e7c..d9722d6 100644
    }
    const data = await response.json();
    return {
-@@ -304,7 +304,7 @@ export async function updateCloudSetting(
+@@ -400,7 +400,7 @@ export async function updateCloudSetting(
    });
    if (!response.ok) {
      const error = await response.text();
@@ -216,7 +221,7 @@ index 8490e7c..d9722d6 100644
    }
  
    const data = await response.json();
-@@ -324,7 +324,7 @@ export async function renameChat(chatId: string, title: string): Promise<void> {
+@@ -420,7 +420,7 @@ export async function renameChat(chatId: string, title: string): Promise<void> {
    });
    if (!response.ok) {
      const error = await response.text();
@@ -225,6 +230,33 @@ index 8490e7c..d9722d6 100644
    }
  }
  
+diff --git a/app/ui/app/src/components/AppSidebar.tsx b/app/ui/app/src/components/AppSidebar.tsx
+index 81edcfd..c360c8e 100644
+--- a/app/ui/app/src/components/AppSidebar.tsx
++++ b/app/ui/app/src/components/AppSidebar.tsx
+@@ -14,7 +14,7 @@ export function AppNavigation({ current }: { current: AppSection }) {
+     <div className="flex flex-col gap-0.5">
+       <Link to="/connect" className={itemClass("apps")} draggable={false}>
+         <RectangleGroupIcon className="h-5 w-5 stroke-current" />
+-        <span className="truncate">Apps</span>
++        <span className="truncate">应用</span>
+       </Link>
+       <Link
+         to="/c/$chatId"
+@@ -24,11 +24,11 @@ export function AppNavigation({ current }: { current: AppSection }) {
+         draggable={false}
+       >
+         <ChatIcon />
+-        <span className="truncate">Chat</span>
++        <span className="truncate">对话</span>
+       </Link>
+       <Link to="/settings" className={itemClass("settings")} draggable={false}>
+         <Cog6ToothIcon className="h-5 w-5 stroke-current" />
+-        <span className="truncate">Settings</span>
++        <span className="truncate">设置</span>
+       </Link>
+     </div>
+   );
 diff --git a/app/ui/app/src/components/Chat.tsx b/app/ui/app/src/components/Chat.tsx
 index e0fcb4f..c957a83 100644
 --- a/app/ui/app/src/components/Chat.tsx
@@ -315,7 +347,7 @@ index b0ae1af..02d6d67 100644
                    <PlusIcon className="w-4.5 h-4.5 stroke-2 text-neutral-500 dark:text-neutral-400" />
                  </button>
 diff --git a/app/ui/app/src/components/ChatSidebar.tsx b/app/ui/app/src/components/ChatSidebar.tsx
-index cd9533e..6a34f47 100644
+index aabe6cd..bff44d9 100644
 --- a/app/ui/app/src/components/ChatSidebar.tsx
 +++ b/app/ui/app/src/components/ChatSidebar.tsx
 @@ -156,16 +156,16 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
@@ -357,53 +389,114 @@ index cd9533e..6a34f47 100644
          handleDeleteChat(chatId);
        }
      },
-@@ -242,7 +242,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
-     return (
-       <nav className="flex min-h-0 flex-col">
-         <div className="flex flex-1 flex-col p-4">
--          <div className="p-4">Loading...</div>
-+          <div className="p-4">加载中...</div>
-         </div>
-       </nav>
-     );
-@@ -252,7 +252,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
-     return (
-       <nav className="flex min-h-0 flex-col">
-         <div className="flex flex-1 flex-col p-4">
--          <div className="p-4 text-red-500">Error loading chats</div>
-+          <div className="p-4 text-red-500">加载对话列表失败</div>
-         </div>
-       </nav>
-     );
-@@ -280,7 +280,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
-             <path d="M17.0859 3.39949L15.2135 5.27196H7.27028C5.78649 5.27196 4.94684 6.11336 4.94684 7.59716V16.664C4.94684 18.1558 5.78649 18.9892 7.27028 18.9892H16.3406C17.8324 18.9892 18.6623 18.1558 18.6623 16.664V8.79514L20.5428 6.9115C20.567 7.11532 20.5773 7.33066 20.5773 7.55419V16.7149C20.5773 19.4069 19.0818 20.9024 16.3898 20.9024H7.22107C4.53708 20.9024 3.03357 19.4069 3.03357 16.7149V7.55419C3.03357 4.8622 4.53708 3.35869 7.22107 3.35869H16.3898C16.6329 3.35869 16.8662 3.37094 17.0859 3.39949Z" />
-             <path d="M9.92714 14.381L11.914 13.5403L20.8312 4.63114L19.3404 3.1581L10.433 12.0655L9.55234 13.9964C9.45664 14.2169 9.70293 14.4714 9.92714 14.381ZM21.5767 3.89364L22.2588 3.19384C22.6347 2.80184 22.6435 2.2663 22.2711 1.90536L22.0148 1.64287C21.6822 1.31377 21.1334 1.36513 20.7689 1.72158L20.0859 2.39833L21.5767 3.89364Z" />
-           </svg>
--          <span className="truncate">New Chat</span>
-+          <span className="truncate">新建对话</span>
-         </Link>
-         {isWindows && (
-           <Link
-@@ -289,7 +289,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
-             draggable={false}
-           >
-             <CogIcon className="h-5 w-5 stroke-current" />
--            <span className="truncate">Settings</span>
-+            <span className="truncate">设置</span>
-           </Link>
-         )}
+@@ -248,9 +248,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
        </header>
-@@ -362,9 +362,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
-                           chat.createdAt.toLocaleString()}
-                       </span>
-                       {copiedChatId === chat.id && (
--                        <span className="ml-2 text-xs text-green-600 dark:text-green-400">
--                          Copied!
--                        </span>
-+                        <span className="ml-2 text-xs text-green-600 dark:text-green-400">已复制!</span>
-                       )}
-                     </Link>
-                   )}
+       <div className="flex flex-1 flex-col px-4 py-1 overflow-y-auto overscroll-auto scrollbar-gutter">
+         {error ? (
+-          <div className="px-2 pt-4 text-sm text-red-500">
+-            Error loading chats
+-          </div>
++          <div className="px-2 pt-4 text-sm text-red-500">加载对话列表失败</div>
+         ) : (
+           <div className="flex flex-col gap-3 pt-4">
+             {chatGroups.map((group) => (
+@@ -320,9 +318,7 @@ export function ChatSidebar({ currentChatId }: ChatSidebarProps) {
+                             chat.createdAt.toLocaleString()}
+                         </span>
+                         {copiedChatId === chat.id && (
+-                          <span className="ml-2 text-xs text-green-600 dark:text-green-400">
+-                            Copied!
+-                          </span>
++                          <span className="ml-2 text-xs text-green-600 dark:text-green-400">已复制!</span>
+                         )}
+                       </Link>
+                     )}
+diff --git a/app/ui/app/src/components/ClaudeDesktopModelsSettings.interaction.test.tsx b/app/ui/app/src/components/ClaudeDesktopModelsSettings.interaction.test.tsx
+index 090d92f..d9ea557 100644
+--- a/app/ui/app/src/components/ClaudeDesktopModelsSettings.interaction.test.tsx
++++ b/app/ui/app/src/components/ClaudeDesktopModelsSettings.interaction.test.tsx
+@@ -677,7 +677,7 @@ describe("ClaudeDesktopModelsSettings interactions", () => {
+         await Promise.resolve();
+       });
+       expect(actionButton(renderer!).props.disabled).toBe(true);
+-      expect(textContent(actionButton(renderer!))).toContain("Resetting…");
++      expect(textContent(actionButton(renderer!))).toContain("正在重置…");
+ 
+       resolveReset(resetResult);
+       let resetSucceeded = false;
+@@ -695,7 +695,7 @@ describe("ClaudeDesktopModelsSettings interactions", () => {
+         "aria-label": "Ollama model for Sonnet 5",
+       });
+       expect(fable.findAllByType("span")[0].children.join("")).toBe(
+-        "Select a model",
++        "选择一个模型",
+       );
+       expect(sonnet.findAllByType("span")[0].children.join("")).toBe(
+         "glm-5.2:cloud",
+diff --git a/app/ui/app/src/components/ClaudeDesktopModelsSettings.test.tsx b/app/ui/app/src/components/ClaudeDesktopModelsSettings.test.tsx
+index 97b1e3b..e7baede 100644
+--- a/app/ui/app/src/components/ClaudeDesktopModelsSettings.test.tsx
++++ b/app/ui/app/src/components/ClaudeDesktopModelsSettings.test.tsx
+@@ -104,7 +104,7 @@ describe("ClaudeDesktopModelsSettings", () => {
+     expect(html).not.toContain("routing");
+     expect(html).not.toContain("Built-in defaults");
+     expect(html).not.toContain("Unassigned");
+-    expect(html).toContain("Select a model");
++    expect(html).toContain("选择一个模型");
+     expect(html).toContain("Start Claude");
+   });
+ 
+diff --git a/app/ui/app/src/components/ClaudeDesktopModelsSettings.tsx b/app/ui/app/src/components/ClaudeDesktopModelsSettings.tsx
+index 0a71726..afb2283 100644
+--- a/app/ui/app/src/components/ClaudeDesktopModelsSettings.tsx
++++ b/app/ui/app/src/components/ClaudeDesktopModelsSettings.tsx
+@@ -158,7 +158,7 @@ function ClaudeModelPicker({
+         <span
+           className={`min-w-0 flex-1 truncate ${value ? "" : "text-neutral-400"}`}
+         >
+-          {value || "Select a model"}
++          {value || "选择一个模型"}
+         </span>
+         <ChevronUpDownIcon className="h-4 w-4 flex-shrink-0 text-neutral-400" />
+       </PopoverButton>
+@@ -212,7 +212,7 @@ function ClaudeModelPickerOptions({
+           type="text"
+           value={query}
+           onChange={(event) => setQuery(event.target.value)}
+-          placeholder="Find model..."
++          placeholder="搜索模型..."
+           aria-label={`Find model for ${routeName}`}
+           autoCorrect="off"
+           autoComplete="off"
+@@ -249,7 +249,7 @@ function ClaudeModelPickerOptions({
+           );
+         })}
+         {filteredModels.length === 0 && (
+-          <p className="px-3 py-2 text-neutral-400">No models found</p>
++          <p className="px-3 py-2 text-neutral-400">未找到模型</p>
+         )}
+       </div>
+     </>
+@@ -579,9 +579,7 @@ export const ClaudeDesktopModelsSettings = forwardRef<
+       <h2
+         id="apps-settings-heading"
+         className="px-1 text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500"
+-      >
+-        Apps
+-      </h2>
++      >应用</h2>
+       <div
+         aria-labelledby="claude-settings-heading"
+         className="overflow-visible rounded-xl bg-white p-4 dark:bg-neutral-800"
+@@ -621,7 +619,7 @@ export const ClaudeDesktopModelsSettings = forwardRef<
+                   <ArrowPathIcon data-slot="icon" className="animate-spin" />
+                 )}
+                 {resettingMappings
+-                  ? "Resetting…"
++                  ? "正在重置…"
+                   : applying
+                     ? status.running
+                       ? "Restarting…"
 diff --git a/app/ui/app/src/components/CopyButton.tsx b/app/ui/app/src/components/CopyButton.tsx
 index f7e6c01..4f11df2 100644
 --- a/app/ui/app/src/components/CopyButton.tsx
@@ -472,59 +565,6 @@ index 93975da..5352c61 100644
          </div>
          <div className="text-sm text-neutral-500 dark:text-neutral-500 ml-6">
            {`${formatBytes(completed, unit)} / ${formatBytes(total, unit)} (${Math.floor(percentage)}%)`}
-diff --git a/app/ui/app/src/components/ErrorFallback.tsx b/app/ui/app/src/components/ErrorFallback.tsx
-new file mode 100644
-index 0000000..35311d8
---- /dev/null
-+++ b/app/ui/app/src/components/ErrorFallback.tsx
-@@ -0,0 +1,47 @@
-+import { useState } from "react";
-+import type { ErrorComponentProps } from "@tanstack/react-router";
-+
-+/**
-+ * 路由级错误兜底组件(中文版)。
-+ * 替换 @tanstack/react-router 默认英文错误组件("Something went wrong!" / "Show Error" / "Hide Error"),
-+ * 该组件位于 @tanstack/react-router 库内部,无法用词典替换,故在此提供中文实现,
-+ * 并在 main.tsx 的 createRouter 中通过 defaultErrorComponent 注册为全局默认错误组件。
-+ */
-+export const ErrorFallback = ({ error }: ErrorComponentProps) => {
-+  const [showDetails, setShowDetails] = useState(false);
-+  return (
-+    <div style={{ padding: ".5rem", maxWidth: "100%" }}>
-+      <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
-+        <strong style={{ fontSize: "1rem" }}>出错了!</strong>
-+        <button
-+          style={{
-+            appearance: "none",
-+            fontSize: ".6em",
-+            border: "1px solid currentColor",
-+            padding: ".1rem .2rem",
-+            fontWeight: "bold",
-+            borderRadius: ".25rem",
-+          }}
-+          onClick={() => setShowDetails((v) => !v)}
-+        >
-+          {showDetails ? "隐藏错误" : "显示错误"}
-+        </button>
-+      </div>
-+      <div style={{ height: ".25rem" }} />
-+      {showDetails && error.message && (
-+        <pre
-+          style={{
-+            fontSize: ".7em",
-+            border: "1px solid red",
-+            borderRadius: ".25rem",
-+            padding: ".3rem",
-+            color: "red",
-+            overflow: "auto",
-+          }}
-+        >
-+          {error.message}
-+        </pre>
-+      )}
-+    </div>
-+  );
-+};
 diff --git a/app/ui/app/src/components/ErrorMessage.tsx b/app/ui/app/src/components/ErrorMessage.tsx
 index 4ebbeec..e234621 100644
 --- a/app/ui/app/src/components/ErrorMessage.tsx
@@ -717,11 +757,259 @@ index 2dba77d..aba0d11 100644
        ) : (
          models.map((model, index) => {
            return (
+diff --git a/app/ui/app/src/components/Onboarding.test.tsx b/app/ui/app/src/components/Onboarding.test.tsx
+index 864e674..81f8dce 100644
+--- a/app/ui/app/src/components/Onboarding.test.tsx
++++ b/app/ui/app/src/components/Onboarding.test.tsx
+@@ -36,15 +36,15 @@ describe("Onboarding", () => {
+     expect(html).toContain(
+       "Run open models with your coding agents so you can spend less while keeping your data private.",
+     );
+-    expect(html.indexOf("Connect your apps")).toBeLessThan(
+-      html.indexOf("Easily switch models"),
++    expect(html.indexOf("连接你的应用")).toBeLessThan(
++      html.indexOf("轻松切换模型"),
+     );
+-    expect(html.indexOf("Easily switch models")).toBeLessThan(
+-      html.indexOf("Your data stays yours"),
++    expect(html.indexOf("轻松切换模型")).toBeLessThan(
++      html.indexOf("你的数据只属于你"),
+     );
+-    expect(html).toContain("Power your existing coding apps with open models");
+-    expect(html).toContain("Swap between frontier models in one click.");
+-    expect(html).toContain("Your prompt data is never logged or trained on.");
++    expect(html).toContain("用开源模型为你的编码应用赋能");
++    expect(html).toContain("一键切换前沿模型。");
++    expect(html).toContain("你的提示词数据不会被记录或用于训练。");
+     expect(html).toContain("Continue");
+     expect(html).not.toContain("Skip");
+   });
+@@ -80,7 +80,7 @@ describe("Onboarding", () => {
+             {
+               id: "claude",
+               name: "Claude Code",
+-              description: "Anthropic's coding tool with subagents",
++              description: "Anthropic 的编码工具(支持子代理)",
+               command: "ollama launch claude",
+             },
+           ]}
+@@ -460,8 +460,8 @@ describe("Onboarding", () => {
+     );
+ 
+     expect(html).toContain("Welcome to Ollama");
+-    expect(html).not.toContain("Run Ollama");
+-    expect(html).not.toContain("Sign up");
++    expect(html).not.toContain("运行 Ollama");
++    expect(html).not.toContain("注册");
+   });
+ 
+   it("groups disconnected Claude with a scrollable terminal list", () => {
+@@ -476,7 +476,7 @@ describe("Onboarding", () => {
+       {
+         id: "claude",
+         name: "Claude Code",
+-        description: "Anthropic's coding tool with subagents",
++        description: "Anthropic 的编码工具(支持子代理)",
+         installed: true,
+         action: "copy",
+         command: "ollama launch claude",
+@@ -484,7 +484,7 @@ describe("Onboarding", () => {
+       {
+         id: "codex",
+         name: "Codex",
+-        description: "OpenAI's open-source coding agent",
++        description: "OpenAI 的开源编码代理",
+         installed: true,
+         action: "copy",
+         command: "ollama launch codex",
+@@ -492,7 +492,7 @@ describe("Onboarding", () => {
+       {
+         id: "openclaw",
+         name: "OpenClaw",
+-        description: "Personal AI with 100+ skills",
++        description: "拥有 100+ 技能的个人 AI",
+         installed: true,
+         action: "copy",
+         command: "ollama launch openclaw",
+@@ -500,7 +500,7 @@ describe("Onboarding", () => {
+       {
+         id: "opencode",
+         name: "OpenCode",
+-        description: "Anomaly's open-source coding agent",
++        description: "Anomaly 的开源编码代理",
+         installed: false,
+         action: "copy",
+         command: "ollama launch opencode",
+@@ -549,7 +549,7 @@ describe("Onboarding", () => {
+     expect(html).toContain("ollama launch claude");
+     expect(html).not.toContain("Installed");
+     expect(html).not.toContain("Not installed");
+-    expect(html).toContain('aria-label="Connect Claude"');
++    expect(html).toContain('aria-label="连接 Claude"');
+     expect(html).toContain('role="switch"');
+     expect(html).toContain('aria-checked="false"');
+     expect(html).not.toContain("Inactive");
+@@ -558,7 +558,7 @@ describe("Onboarding", () => {
+     expect(html).toContain("bg-transparent");
+     expect(html).toContain('aria-label="Copy OpenCode command"');
+     expect(html).toContain('aria-label="Copy Terminal command"');
+-    expect(html).not.toContain(">Copy command</button>");
++    expect(html).not.toContain(">复制命令</button>");
+     expect(html).not.toContain("ChatGPT");
+     expect(html).toContain("OpenCode");
+     expect(html).toContain("Terminal");
+@@ -576,7 +576,7 @@ describe("Onboarding", () => {
+     expect(html).not.toContain("Launch command");
+     expect(html).not.toContain('aria-pressed="true"');
+     expect(html).not.toContain("Continue");
+-    expect(html).not.toContain("Run Ollama");
++    expect(html).not.toContain("运行 Ollama");
+     expect(html).not.toContain('viewBox="0 0 3400 3400"');
+   });
+ 
+@@ -606,7 +606,7 @@ describe("Onboarding", () => {
+           {
+             id: "codex",
+             name: "Codex",
+-            description: "OpenAI's open-source coding agent",
++            description: "OpenAI 的开源编码代理",
+             installed: true,
+             action: "copy",
+             command: "ollama launch codex",
+@@ -621,7 +621,7 @@ describe("Onboarding", () => {
+     expect(html).not.toContain("Active");
+     expect(html).not.toContain("Inactive");
+     expect(html).toContain('aria-checked="true"');
+-    expect(html).toContain('aria-label="Disconnect Claude"');
++    expect(html).toContain('aria-label="断开 Claude 连接"');
+     expect(html).toContain("Connected to Ollama · 12 requests this session");
+   });
+ 
+@@ -659,7 +659,7 @@ describe("Onboarding", () => {
+     expect(html).toContain('role="alert"');
+     expect(html).not.toContain("text-red");
+     expect(html).toContain('aria-checked="true"');
+-    expect(html).toContain('aria-label="Disconnect Claude"');
++    expect(html).toContain('aria-label="断开 Claude 连接"');
+   });
+ 
+   it("keeps Claude model management off the Connect Apps page", () => {
+@@ -729,7 +729,7 @@ describe("Onboarding", () => {
+     );
+ 
+     expect(html).toContain("Use Ollama models in Claude Desktop");
+-    expect(html).toContain('aria-label="Connect Claude"');
++    expect(html).toContain('aria-label="连接 Claude"');
+     expect(html).toContain("Download &amp; connect");
+     expect(html).not.toContain("Inactive");
+     expect(html).not.toContain("Not installed");
+@@ -797,7 +797,7 @@ describe("Onboarding", () => {
+       "Create your account for access to faster, larger open models.",
+     );
+     expect(html).toContain("Your data is never logged or trained on.");
+-    expect(html).toContain("Sign up");
++    expect(html).toContain("注册");
+     expect(html).toContain("No thanks, I&#x27;ll use Ollama locally");
+     expect(html).toContain("Sign in");
+     expect(html).not.toContain("Skip");
+@@ -828,7 +828,7 @@ describe("Onboarding", () => {
+       <RunOllamaScreen completionError={null} onRetryCompletion={vi.fn()} />,
+     );
+ 
+-    expect(html).toContain("Run Ollama");
++    expect(html).toContain("运行 Ollama");
+     expect(html).toContain(FIRST_MODEL_COMMAND);
+     expect(html).not.toContain("Finish");
+     expect(html).not.toContain("Sign in");
+@@ -847,7 +847,7 @@ describe("Onboarding", () => {
+       />,
+     );
+ 
+-    expect(html).toContain("Finish in your browser…");
++    expect(html).toContain("在浏览器中完成…");
+     expect(html).not.toContain("Waiting for sign in…");
+   });
+ 
+@@ -862,6 +862,6 @@ describe("Onboarding", () => {
+ 
+     expect(html).toContain("Unable to save setup. Please try again.");
+     expect(html).toContain('role="alert"');
+-    expect(html).toContain("Try again");
++    expect(html).toContain("重试");
+   });
+ });
 diff --git a/app/ui/app/src/components/Onboarding.tsx b/app/ui/app/src/components/Onboarding.tsx
-index e056829..a22672c 100644
+index 4c93fe1..ab465b8 100644
 --- a/app/ui/app/src/components/Onboarding.tsx
 +++ b/app/ui/app/src/components/Onboarding.tsx
-@@ -222,7 +222,7 @@ export function RunOllamaScreen({
+@@ -147,18 +147,18 @@ function OnboardingCard({ children }: { children: ReactNode }) {
+ 
+ const OLLAMA_FEATURES = [
+   {
+-    title: "Connect your apps",
+-    description: "Power your existing coding apps with open models",
++    title: "连接你的应用",
++    description: "用开源模型为你的编码应用赋能",
+     icon: CommandLineIcon,
+   },
+   {
+-    title: "Easily switch models",
+-    description: "Swap between frontier models in one click.",
++    title: "轻松切换模型",
++    description: "一键切换前沿模型。",
+     icon: ArrowsRightLeftIcon,
+   },
+   {
+-    title: "Your data stays yours",
+-    description: "Your prompt data is never logged or trained on.",
++    title: "你的数据只属于你",
++    description: "你的提示词数据不会被记录或用于训练。",
+     icon: ShieldCheckIcon,
+   },
+ ];
+@@ -226,9 +226,7 @@ export function IntroScreen({
+               type="button"
+               className="mt-2 cursor-pointer rounded-md px-3 py-1 text-sm font-normal text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500"
+               onClick={onRetryCompletion}
+-            >
+-              Try again
+-            </button>
++            >重试</button>
+           )}
+         </div>
+       </section>
+@@ -285,7 +283,7 @@ export function WelcomeScreen({
+             disabled={isSigningIn}
+             aria-busy={isSigningIn}
+           >
+-            {isSigningIn ? "Finish in your browser…" : "Sign up"}
++            {isSigningIn ? "在浏览器中完成…" : "注册"}
+           </button>
+           <button
+             type="button"
+@@ -300,9 +298,7 @@ export function WelcomeScreen({
+               type="button"
+               className="mt-2 cursor-pointer rounded-md px-3 py-1 text-sm font-normal text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500"
+               onClick={onRetryCompletion}
+-            >
+-              Try again
+-            </button>
++            >重试</button>
+           )}
+         </div>
+       </OnboardingCard>
+@@ -319,9 +315,7 @@ export function RunOllamaScreen({
+       <TitleBar />
+       <OnboardingCard>
+         <OnboardingIcon compact />
+-        <h1 className="mt-6 font-rounded text-[22px] font-medium leading-7">
+-          Run Ollama
+-        </h1>
++        <h1 className="mt-6 font-rounded text-[22px] font-medium leading-7">运行 Ollama</h1>
+ 
+         <div className="mt-6 grid h-12 w-full max-w-[330px] grid-cols-[minmax(0,1fr)_32px] items-center rounded-full bg-neutral-100 px-4 pr-3">
+           <code className="min-w-0 truncate text-left font-mono text-sm">
+@@ -330,14 +324,12 @@ export function RunOllamaScreen({
            <CopyButton
              content={FIRST_MODEL_COMMAND}
              size="md"
@@ -730,11 +1018,130 @@ index e056829..a22672c 100644
              className="shrink-0 text-neutral-400 hover:!bg-transparent hover:!text-neutral-400 dark:hover:!bg-transparent"
            />
          </div>
+ 
+-        <p className="mt-3 max-w-xs text-[13px] leading-5 text-neutral-400">
+-          Run this command in your terminal to get started.
+-        </p>
++        <p className="mt-3 max-w-xs text-[13px] leading-5 text-neutral-400">在终端中运行此命令开始使用。</p>
+ 
+         <InlineError message={completionError} />
+         {completionError && (
+@@ -345,9 +337,7 @@ export function RunOllamaScreen({
+             type="button"
+             className="mt-2 cursor-pointer rounded-md px-3 py-1 text-sm font-normal text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500"
+             onClick={onRetryCompletion}
+-          >
+-            Try again
+-          </button>
++          >重试</button>
+         )}
+       </OnboardingCard>
+     </main>
+@@ -394,9 +384,7 @@ export function ClaudeConnectedIntro({ onDone }: { onDone: () => void }) {
+           <h2
+             id="claude-connected-title"
+             className="font-rounded text-lg font-medium leading-6 text-neutral-950"
+-          >
+-            Easily access Ollama models in your Claude
+-          </h2>
++          >在 Claude 中轻松使用 Ollama 模型</h2>
+           <p
+             id="claude-connected-description"
+             className="mt-2 text-[13px] leading-5 text-neutral-500"
+@@ -692,7 +680,7 @@ export function ConnectAppsScreen({
+         if (status.running) {
+           setClaudePhase("idle");
+           setClaudeError(
+-            "Claude is installed. Turn on Connect to restart it with Ollama.",
++            "Claude 已安装。打开连接以通过 Ollama 重启它。",
+           );
+           return;
+         }
+@@ -909,11 +897,11 @@ export function ConnectAppsScreen({
+       : claudePhase === "waiting-for-install"
+         ? "Finish installing…"
+         : claudePhase === "connecting"
+-          ? "Connecting…"
++          ? "正在连接…"
+           : claudePhase === "launching"
+             ? "Opening…"
+             : claudePhase === "disconnecting"
+-              ? "Disconnecting…"
++              ? "正在断开…"
+               : !claudeConfigured && !claudeInstalled
+                 ? "Download & connect"
+                 : null;
+@@ -950,7 +938,7 @@ export function ConnectAppsScreen({
+                 ? `${item.name} command copied`
+                 : `Copy ${item.name} command`
+             }
+-            title={copied ? "Copied" : "Copy command"}
++            title={copied ? "已复制" : "复制命令"}
+           >
+             {copied ? (
+               <CheckIcon className="h-4 w-4 text-green-600" />
+@@ -982,7 +970,7 @@ export function ConnectAppsScreen({
+                   : claudePhase === "waiting-for-install"
+                     ? "Finish installing Claude. Ollama will connect it automatically."
+                     : claudePhase === "connecting"
+-                      ? "Connecting Claude to Ollama…"
++                      ? "正在将 Claude 连接到 Ollama…"
+                       : claudePhase === "launching"
+                         ? "Opening Claude…"
+                         : claudePhase === "disconnecting"
+@@ -1011,12 +999,12 @@ export function ConnectAppsScreen({
+           aria-busy={isConnectingClaude || undefined}
+           aria-label={
+             claudeConfigured
+-              ? "Disconnect Claude"
++              ? "断开 Claude 连接"
+               : isConnectingClaude
+-                ? "Connecting Claude"
+-                : "Connect Claude"
++                ? "正在连接 Claude"
++                : "连接 Claude"
+           }
+-          title={claudeConfigured ? "Disconnect" : "Connect"}
++          title={claudeConfigured ? "断开连接" : "连接"}
+           disabled={isConnectingClaude}
+           onClick={connectClaude}
+           className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500 disabled:cursor-wait disabled:opacity-50 ${claudeToggleConfigured ? "bg-neutral-950" : "bg-neutral-300"}`}
+diff --git a/app/ui/app/src/components/Settings.interaction.test.tsx b/app/ui/app/src/components/Settings.interaction.test.tsx
+index f6683a6..a31cee1 100644
+--- a/app/ui/app/src/components/Settings.interaction.test.tsx
++++ b/app/ui/app/src/components/Settings.interaction.test.tsx
+@@ -180,7 +180,7 @@ describe("Settings reset interactions", () => {
+ 
+       const resetButton = renderer!.root
+         .findAllByType("button")
+-        .find((button) => textContent(button).includes("Reset to defaults"));
++        .find((button) => textContent(button).includes("恢复默认设置"));
+       if (!resetButton) throw new Error("Reset button not found");
+ 
+       await act(async () => {
+@@ -191,7 +191,7 @@ describe("Settings reset interactions", () => {
+       const settingsFieldset = renderer!.root.findByType("fieldset");
+       expect(settingsFieldset.props.disabled).toBe(true);
+       expect(settingsFieldset.props["aria-busy"]).toBe(true);
+-      expect(textContent(resetButton)).toContain("Resetting…");
++      expect(textContent(resetButton)).toContain("正在重置…");
+       expect(renderer!.root.findAllByType(Badge)).toHaveLength(0);
+ 
+       await act(async () => {
+@@ -228,7 +228,7 @@ describe("Settings reset interactions", () => {
+ 
+       const resetButton = renderer!.root
+         .findAllByType("button")
+-        .find((button) => textContent(button).includes("Reset to defaults"));
++        .find((button) => textContent(button).includes("恢复默认设置"));
+       if (!resetButton) throw new Error("Reset button not found");
+ 
+       await act(async () => {
 diff --git a/app/ui/app/src/components/Settings.tsx b/app/ui/app/src/components/Settings.tsx
-index 80ccf8a..9c89b63 100644
+index 7577548..44a0218 100644
 --- a/app/ui/app/src/components/Settings.tsx
 +++ b/app/ui/app/src/components/Settings.tsx
-@@ -242,15 +242,15 @@ export default function Settings() {
+@@ -435,15 +435,15 @@ export default function Settings() {
            }, 5000);
            setPollingInterval(interval);
          } else {
@@ -753,27 +1160,16 @@ index 80ccf8a..9c89b63 100644
        );
        setIsAwaitingConnection(false);
      }
-@@ -263,7 +263,7 @@ export default function Settings() {
+@@ -456,7 +456,7 @@ export default function Settings() {
    if (error || !settings) {
      return (
-       <div className="flex min-h-screen items-center justify-center">
+       <div className="flex flex-1 items-center justify-center">
 -        <div className="text-red-500">Failed to load settings</div>
 +        <div className="text-red-500">加载设置失败</div>
        </div>
      );
    }
-@@ -279,9 +279,7 @@ export default function Settings() {
-       >
-         <h1
-           className={`${isWindows ? "pl-4" : "pl-24"} flex items-center font-rounded text-md font-medium dark:text-white`}
--        >
--          Settings
--        </h1>
-+        >设置</h1>
-       </header>
-       <div className="w-full p-6 overflow-y-auto flex-1 overscroll-contain">
-         <div className="space-y-4 max-w-2xl mx-auto">
-@@ -325,7 +323,7 @@ export default function Settings() {
+@@ -511,7 +511,7 @@ export default function Settings() {
                              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-green-500/20 opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
                              <span className="relative z-10 flex items-center space-x-2">
@@ -782,7 +1178,7 @@ index 80ccf8a..9c89b63 100644
                              </span>
                            </Button>
                          )}
-@@ -336,17 +334,13 @@ export default function Settings() {
+@@ -522,17 +522,13 @@ export default function Settings() {
                            onClick={() =>
                              window.open("https://ollama.com/settings", "_blank")
                            }
@@ -802,7 +1198,7 @@ index 80ccf8a..9c89b63 100644
                        </div>
                      </div>
                      {user?.avatarurl && (
-@@ -364,8 +358,8 @@ export default function Settings() {
+@@ -550,8 +546,8 @@ export default function Settings() {
                  ) : (
                    <div className="flex items-center justify-between">
                      <div>
@@ -813,7 +1209,7 @@ index 80ccf8a..9c89b63 100644
                      </div>
                      <Button
                        type="button"
-@@ -376,7 +370,7 @@ export default function Settings() {
+@@ -562,7 +558,7 @@ export default function Settings() {
                        {isRefreshing || isAwaitingConnection ? (
                          <AnimatedDots />
                        ) : (
@@ -822,7 +1218,7 @@ index 80ccf8a..9c89b63 100644
                        )}
                      </Button>
                    </div>
-@@ -399,11 +393,11 @@ export default function Settings() {
+@@ -585,11 +581,11 @@ export default function Settings() {
                    <div className="flex items-start space-x-3 flex-1">
                      <CloudIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                      <div>
@@ -837,7 +1233,7 @@ index 80ccf8a..9c89b63 100644
                        </Description>
                      </div>
                    </div>
-@@ -428,11 +422,11 @@ export default function Settings() {
+@@ -637,11 +633,11 @@ export default function Settings() {
                    <div className="flex items-start space-x-3 flex-1">
                      <ArrowDownTrayIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                      <div>
@@ -852,7 +1248,7 @@ index 80ccf8a..9c89b63 100644
                        </Description>
                      </div>
                    </div>
-@@ -453,10 +447,8 @@ export default function Settings() {
+@@ -662,10 +658,8 @@ export default function Settings() {
                    <div className="flex items-start space-x-3 flex-1">
                      <WifiIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                      <div>
@@ -865,7 +1261,7 @@ index 80ccf8a..9c89b63 100644
                      </div>
                    </div>
                    <div className="flex-shrink-0">
-@@ -473,8 +465,8 @@ export default function Settings() {
+@@ -682,8 +676,8 @@ export default function Settings() {
                  <div className="flex items-start space-x-3">
                    <FolderIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                    <div className="w-full">
@@ -876,7 +1272,7 @@ index 80ccf8a..9c89b63 100644
                      <div className="mt-2 flex items-center space-x-2">
                        <Input
                          value={settings.Models || ""}
-@@ -495,16 +487,14 @@ export default function Settings() {
+@@ -704,16 +698,14 @@ export default function Settings() {
                                }
                              } catch (error) {
                                console.error(
@@ -895,7 +1291,7 @@ index 80ccf8a..9c89b63 100644
                      </div>
                    </div>
                  </div>
-@@ -515,11 +505,8 @@ export default function Settings() {
+@@ -724,11 +716,8 @@ export default function Settings() {
                  <div className="flex items-start space-x-3">
                    <CogIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                    <div className="w-full">
@@ -909,7 +1305,7 @@ index 80ccf8a..9c89b63 100644
                      <div className="mt-3">
                        <Slider
                          value={
-@@ -555,10 +542,8 @@ export default function Settings() {
+@@ -774,10 +763,8 @@ export default function Settings() {
                      <div className="flex items-start space-x-3">
                        <BoltIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                        <div>
@@ -922,7 +1318,7 @@ index 80ccf8a..9c89b63 100644
                        </div>
                      </div>
                      <Switch
-@@ -574,10 +559,8 @@ export default function Settings() {
+@@ -793,10 +780,8 @@ export default function Settings() {
                      <div className="flex items-start space-x-3">
                        <WrenchIcon className="mt-1 h-5 w-5 flex-shrink-0 text-black dark:text-neutral-100" />
                        <div>
@@ -935,18 +1331,16 @@ index 80ccf8a..9c89b63 100644
                        </div>
                      </div>
                      <Switch
-@@ -597,9 +580,7 @@ export default function Settings() {
-               color="white"
-               className="px-3"
-               onClick={handleResetToDefaults}
--            >
--              Reset to defaults
--            </Button>
-+            >恢复默认设置</Button>
+@@ -831,7 +816,7 @@ export default function Settings() {
+               {resettingToDefaults && (
+                 <ArrowPathIcon data-slot="icon" className="animate-spin" />
+               )}
+-              {resettingToDefaults ? "Resetting…" : "Reset to defaults"}
++              {resettingToDefaults ? "正在重置…" : "恢复默认设置"}
+             </Button>
            </div>
-         </div>
- 
-@@ -609,9 +590,7 @@ export default function Settings() {
+         </fieldset>
+@@ -842,9 +827,7 @@ export default function Settings() {
              <Badge
                color="green"
                className="!bg-green-500 !text-white dark:!bg-green-600"
@@ -1021,30 +1415,43 @@ index e41f120..a60c9e9 100644
          onClick={onToggle}
          className={`select-none flex items-center justify-center rounded-full h-9 w-9 bg-white dark:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-all whitespace-nowrap border border-transparent ${
            isActive
+diff --git a/app/ui/app/src/components/layout/layout.test.tsx b/app/ui/app/src/components/layout/layout.test.tsx
+index f4f7695..3aba3a9 100644
+--- a/app/ui/app/src/components/layout/layout.test.tsx
++++ b/app/ui/app/src/components/layout/layout.test.tsx
+@@ -11,7 +11,7 @@ describe("SidebarLayout", () => {
+     vi.stubGlobal("window", { OLLAMA_PLATFORM: "darwin" });
+ 
+     const html = renderToStaticMarkup(
+-      <SidebarLayout title="Connect your apps" sidebar={<nav />}>
++      <SidebarLayout title="连接你的应用" sidebar={<nav />}>
+         <div />
+       </SidebarLayout>,
+     );
 diff --git a/app/ui/app/src/components/layout/layout.tsx b/app/ui/app/src/components/layout/layout.tsx
-index bffb057..c2db3e4 100644
+index 4fa0c7e..b9bb12c 100644
 --- a/app/ui/app/src/components/layout/layout.tsx
 +++ b/app/ui/app/src/components/layout/layout.tsx
-@@ -23,8 +23,8 @@ export function SidebarLayout({
+@@ -32,8 +32,8 @@ export function SidebarLayout({
              e.stopPropagation();
            }}
            className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700/75 cursor-pointer"
--          aria-label={settings.sidebarOpen ? "Hide sidebar" : "Show sidebar"}
--          title={settings.sidebarOpen ? "Hide sidebar" : "Show sidebar"}
-+          aria-label={settings.sidebarOpen ? "隐藏侧边栏" : "显示侧边栏"}
-+          title={settings.sidebarOpen ? "隐藏侧边栏" : "显示侧边栏"}
+-          aria-label={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
+-          title={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
++          aria-label={sidebarOpen ? "隐藏侧边栏" : "显示侧边栏"}
++          title={sidebarOpen ? "隐藏侧边栏" : "显示侧边栏"}
          >
            <svg
              className="h-5 w-5 fill-current"
-@@ -38,7 +38,7 @@ export function SidebarLayout({
-         <Link
-           to="/c/$chatId"
-           params={{ chatId: "new" }}
--          title="New chat"
-+          title="新建对话"
-           className={`flex ml-1 items-center justify-center rounded-full transition-opacity duration-375 h-9 w-9 hover:bg-neutral-100 dark:hover:bg-neutral-700 ${
-             settings.sidebarOpen
-               ? "opacity-0 pointer-events-none"
+@@ -48,7 +48,7 @@ export function SidebarLayout({
+           <Link
+             to="/c/$chatId"
+             params={{ chatId: "new" }}
+-            title="New chat"
++            title="新建对话"
+             className={`flex ml-1 items-center justify-center rounded-full transition-opacity duration-375 h-9 w-9 hover:bg-neutral-100 dark:hover:bg-neutral-700 ${
+               sidebarOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+             }`}
 diff --git a/app/ui/app/src/main.tsx b/app/ui/app/src/main.tsx
 index 3e325a3..554fe0f 100644
 --- a/app/ui/app/src/main.tsx
@@ -1096,6 +1503,32 @@ index fdef472..e54cdcd 100644
        </SidebarLayout>
      );
    }
+diff --git a/app/ui/app/src/routes/connect.tsx b/app/ui/app/src/routes/connect.tsx
+index 78db1f2..31f5cf9 100644
+--- a/app/ui/app/src/routes/connect.tsx
++++ b/app/ui/app/src/routes/connect.tsx
+@@ -9,7 +9,7 @@ export const Route = createFileRoute("/connect")({
+ 
+ function ConnectRoute() {
+   return (
+-    <SidebarLayout title="Apps" sidebar={<AppSidebar current="apps" />}>
++    <SidebarLayout title="应用" sidebar={<AppSidebar current="apps" />}>
+       <ConnectAppsScreen />
+     </SidebarLayout>
+   );
+diff --git a/app/ui/app/src/routes/settings.tsx b/app/ui/app/src/routes/settings.tsx
+index 16672e7..d503845 100644
+--- a/app/ui/app/src/routes/settings.tsx
++++ b/app/ui/app/src/routes/settings.tsx
+@@ -9,7 +9,7 @@ export const Route = createFileRoute("/settings")({
+ 
+ function SettingsRoute() {
+   return (
+-    <SidebarLayout title="Settings" sidebar={<AppSidebar current="settings" />}>
++    <SidebarLayout title="设置" sidebar={<AppSidebar current="settings" />}>
+       <Settings />
+     </SidebarLayout>
+   );
 diff --git a/app/ui/app/src/utils/fileValidation.test.ts b/app/ui/app/src/utils/fileValidation.test.ts
 index d5a2205..938c849 100644
 --- a/app/ui/app/src/utils/fileValidation.test.ts
@@ -1147,10 +1580,10 @@ index d7a01a1..56b1759 100644
      }
    }
 diff --git a/app/ui/ui.go b/app/ui/ui.go
-index 1c07b1d..147a7c3 100644
+index e5458f3..c332e2b 100644
 --- a/app/ui/ui.go
 +++ b/app/ui/ui.go
-@@ -152,7 +152,7 @@ func (s *Server) ollamaProxy() http.Handler {
+@@ -155,7 +155,7 @@ func (s *Server) ollamaProxy() http.Handler {
  				if err != nil {
  					proxyMu.Unlock()
  					s.log().Error("ollama server not ready after retries", "error", err)
@@ -1159,7 +1592,7 @@ index 1c07b1d..147a7c3 100644
  					return
  				}
  
-@@ -209,13 +209,13 @@ func (s *Server) Handler() http.Handler {
+@@ -212,13 +212,13 @@ func (s *Server) Handler() http.Handler {
  				cookie, err := r.Cookie("token")
  				if err != nil {
  					w.WriteHeader(http.StatusForbidden)
@@ -1175,7 +1608,7 @@ index 1c07b1d..147a7c3 100644
  					return
  				}
  			}
-@@ -541,7 +541,7 @@ func (s *Server) getError(err error) responses.ErrorEvent {
+@@ -614,7 +614,7 @@ func (s *Server) getError(err error) responses.ErrorEvent {
  	if errors.As(err, &sErr) && sErr.StatusCode == http.StatusUnauthorized {
  		return responses.ErrorEvent{
  			EventName: "error",
@@ -1184,7 +1617,7 @@ index 1c07b1d..147a7c3 100644
  			Code:      "cloud_unauthorized",
  		}
  	}
-@@ -552,19 +552,19 @@ func (s *Server) getError(err error) responses.ErrorEvent {
+@@ -625,19 +625,19 @@ func (s *Server) getError(err error) responses.ErrorEvent {
  	case strings.Contains(errStr, "402"):
  		return responses.ErrorEvent{
  			EventName: "error",
@@ -1208,7 +1641,7 @@ index 1c07b1d..147a7c3 100644
  		}
  	}
 diff --git a/app/wintray/messages.go b/app/wintray/messages.go
-index 59afa1c..5e320d8 100644
+index 18ba8c7..eb07cb9 100644
 --- a/app/wintray/messages.go
 +++ b/app/wintray/messages.go
 @@ -3,15 +3,15 @@
@@ -1228,11 +1661,12 @@ index 59afa1c..5e320d8 100644
 -	updateAvailableMenuTitle = "An update is available"
 -	updateMenuTitle          = "Restart to update"
 -	diagLogsMenuTitle        = "View logs"
+-	openAppsMenuTitle        = "Open Ollama"
+-	settingsUIMenuTitle      = "Settings"
 +	quitMenuTitle            = "退出 Ollama"
 +	updateAvailableMenuTitle = "有可用更新"
 +	updateMenuTitle          = "重启以更新"
 +	diagLogsMenuTitle        = "查看日志"
- 	openUIMenuTitle          = "Open Ollama Chat"
--	settingsUIMenuTitle      = "Settings..."
-+	settingsUIMenuTitle      = "设置..."
++	openAppsMenuTitle        = "打开 Ollama"
++	settingsUIMenuTitle      = "设置"
  )
