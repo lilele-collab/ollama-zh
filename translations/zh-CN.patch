@@ -1670,3 +1670,56 @@ index 18ba8c7..eb07cb9 100644
 +	openAppsMenuTitle        = "打开 Ollama"
 +	settingsUIMenuTitle      = "设置"
  )
+diff --git a/app/ui/app/src/components/ErrorFallback.tsx b/app/ui/app/src/components/ErrorFallback.tsx
+new file mode 100644
+index 0000000..35311d8
+--- /dev/null
++++ b/app/ui/app/src/components/ErrorFallback.tsx
+@@ -0,0 +1,47 @@
++import { useState } from "react";
++import type { ErrorComponentProps } from "@tanstack/react-router";
++
++/**
++ * 路由级错误兜底组件(中文版)。
++ * 替换 @tanstack/react-router 默认英文错误组件("Something went wrong!" / "Show Error" / "Hide Error"),
++ * 该组件位于 @tanstack/react-router 库内部,无法用词典替换,故在此提供中文实现,
++ * 并在 main.tsx 的 createRouter 中通过 defaultErrorComponent 注册为全局默认错误组件。
++ */
++export const ErrorFallback = ({ error }: ErrorComponentProps) => {
++  const [showDetails, setShowDetails] = useState(false);
++  return (
++    <div style={{ padding: ".5rem", maxWidth: "100%" }}>
++      <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
++        <strong style={{ fontSize: "1rem" }}>出错了!</strong>
++        <button
++          style={{
++            appearance: "none",
++            fontSize: ".6em",
++            border: "1px solid currentColor",
++            padding: ".1rem .2rem",
++            fontWeight: "bold",
++            borderRadius: ".25rem",
++          }}
++          onClick={() => setShowDetails((v) => !v)}
++        >
++          {showDetails ? "隐藏错误" : "显示错误"}
++        </button>
++      </div>
++      <div style={{ height: ".25rem" }} />
++      {showDetails && error.message && (
++        <pre
++          style={{
++            fontSize: ".7em",
++            border: "1px solid red",
++            borderRadius: ".25rem",
++            padding: ".3rem",
++            color: "red",
++            overflow: "auto",
++          }}
++        >
++          {error.message}
++        </pre>
++      )}
++    </div>
++  );
++};
