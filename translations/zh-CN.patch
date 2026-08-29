@@ -757,189 +757,9 @@ index 2dba77d..aba0d11 100644
        ) : (
          models.map((model, index) => {
            return (
-diff --git a/app/ui/app/src/components/Onboarding.test.tsx b/app/ui/app/src/components/Onboarding.test.tsx
-index 864e674..81f8dce 100644
---- a/app/ui/app/src/components/Onboarding.test.tsx
-+++ b/app/ui/app/src/components/Onboarding.test.tsx
-@@ -36,15 +36,15 @@ describe("Onboarding", () => {
-     expect(html).toContain(
-       "Run open models with your coding agents so you can spend less while keeping your data private.",
-     );
--    expect(html.indexOf("Connect your apps")).toBeLessThan(
--      html.indexOf("Easily switch models"),
-+    expect(html.indexOf("连接你的应用")).toBeLessThan(
-+      html.indexOf("轻松切换模型"),
-     );
--    expect(html.indexOf("Easily switch models")).toBeLessThan(
--      html.indexOf("Your data stays yours"),
-+    expect(html.indexOf("轻松切换模型")).toBeLessThan(
-+      html.indexOf("你的数据只属于你"),
-     );
--    expect(html).toContain("Power your existing coding apps with open models");
--    expect(html).toContain("Swap between frontier models in one click.");
--    expect(html).toContain("Your prompt data is never logged or trained on.");
-+    expect(html).toContain("用开源模型为你的编码应用赋能");
-+    expect(html).toContain("一键切换前沿模型。");
-+    expect(html).toContain("你的提示词数据不会被记录或用于训练。");
-     expect(html).toContain("Continue");
-     expect(html).not.toContain("Skip");
-   });
-@@ -80,7 +80,7 @@ describe("Onboarding", () => {
-             {
-               id: "claude",
-               name: "Claude Code",
--              description: "Anthropic's coding tool with subagents",
-+              description: "Anthropic 的编码工具(支持子代理)",
-               command: "ollama launch claude",
-             },
-           ]}
-@@ -460,8 +460,8 @@ describe("Onboarding", () => {
-     );
- 
-     expect(html).toContain("Welcome to Ollama");
--    expect(html).not.toContain("Run Ollama");
--    expect(html).not.toContain("Sign up");
-+    expect(html).not.toContain("运行 Ollama");
-+    expect(html).not.toContain("注册");
-   });
- 
-   it("groups disconnected Claude with a scrollable terminal list", () => {
-@@ -476,7 +476,7 @@ describe("Onboarding", () => {
-       {
-         id: "claude",
-         name: "Claude Code",
--        description: "Anthropic's coding tool with subagents",
-+        description: "Anthropic 的编码工具(支持子代理)",
-         installed: true,
-         action: "copy",
-         command: "ollama launch claude",
-@@ -484,7 +484,7 @@ describe("Onboarding", () => {
-       {
-         id: "codex",
-         name: "Codex",
--        description: "OpenAI's open-source coding agent",
-+        description: "OpenAI 的开源编码代理",
-         installed: true,
-         action: "copy",
-         command: "ollama launch codex",
-@@ -492,7 +492,7 @@ describe("Onboarding", () => {
-       {
-         id: "openclaw",
-         name: "OpenClaw",
--        description: "Personal AI with 100+ skills",
-+        description: "拥有 100+ 技能的个人 AI",
-         installed: true,
-         action: "copy",
-         command: "ollama launch openclaw",
-@@ -500,7 +500,7 @@ describe("Onboarding", () => {
-       {
-         id: "opencode",
-         name: "OpenCode",
--        description: "Anomaly's open-source coding agent",
-+        description: "Anomaly 的开源编码代理",
-         installed: false,
-         action: "copy",
-         command: "ollama launch opencode",
-@@ -549,7 +549,7 @@ describe("Onboarding", () => {
-     expect(html).toContain("ollama launch claude");
-     expect(html).not.toContain("Installed");
-     expect(html).not.toContain("Not installed");
--    expect(html).toContain('aria-label="Connect Claude"');
-+    expect(html).toContain('aria-label="连接 Claude"');
-     expect(html).toContain('role="switch"');
-     expect(html).toContain('aria-checked="false"');
-     expect(html).not.toContain("Inactive");
-@@ -558,7 +558,7 @@ describe("Onboarding", () => {
-     expect(html).toContain("bg-transparent");
-     expect(html).toContain('aria-label="Copy OpenCode command"');
-     expect(html).toContain('aria-label="Copy Terminal command"');
--    expect(html).not.toContain(">Copy command</button>");
-+    expect(html).not.toContain(">复制命令</button>");
-     expect(html).not.toContain("ChatGPT");
-     expect(html).toContain("OpenCode");
-     expect(html).toContain("Terminal");
-@@ -576,7 +576,7 @@ describe("Onboarding", () => {
-     expect(html).not.toContain("Launch command");
-     expect(html).not.toContain('aria-pressed="true"');
-     expect(html).not.toContain("Continue");
--    expect(html).not.toContain("Run Ollama");
-+    expect(html).not.toContain("运行 Ollama");
-     expect(html).not.toContain('viewBox="0 0 3400 3400"');
-   });
- 
-@@ -606,7 +606,7 @@ describe("Onboarding", () => {
-           {
-             id: "codex",
-             name: "Codex",
--            description: "OpenAI's open-source coding agent",
-+            description: "OpenAI 的开源编码代理",
-             installed: true,
-             action: "copy",
-             command: "ollama launch codex",
-@@ -621,7 +621,7 @@ describe("Onboarding", () => {
-     expect(html).not.toContain("Active");
-     expect(html).not.toContain("Inactive");
-     expect(html).toContain('aria-checked="true"');
--    expect(html).toContain('aria-label="Disconnect Claude"');
-+    expect(html).toContain('aria-label="断开 Claude 连接"');
-     expect(html).toContain("Connected to Ollama · 12 requests this session");
-   });
- 
-@@ -659,7 +659,7 @@ describe("Onboarding", () => {
-     expect(html).toContain('role="alert"');
-     expect(html).not.toContain("text-red");
-     expect(html).toContain('aria-checked="true"');
--    expect(html).toContain('aria-label="Disconnect Claude"');
-+    expect(html).toContain('aria-label="断开 Claude 连接"');
-   });
- 
-   it("keeps Claude model management off the Connect Apps page", () => {
-@@ -729,7 +729,7 @@ describe("Onboarding", () => {
-     );
- 
-     expect(html).toContain("Use Ollama models in Claude Desktop");
--    expect(html).toContain('aria-label="Connect Claude"');
-+    expect(html).toContain('aria-label="连接 Claude"');
-     expect(html).toContain("Download &amp; connect");
-     expect(html).not.toContain("Inactive");
-     expect(html).not.toContain("Not installed");
-@@ -797,7 +797,7 @@ describe("Onboarding", () => {
-       "Create your account for access to faster, larger open models.",
-     );
-     expect(html).toContain("Your data is never logged or trained on.");
--    expect(html).toContain("Sign up");
-+    expect(html).toContain("注册");
-     expect(html).toContain("No thanks, I&#x27;ll use Ollama locally");
-     expect(html).toContain("Sign in");
-     expect(html).not.toContain("Skip");
-@@ -828,7 +828,7 @@ describe("Onboarding", () => {
-       <RunOllamaScreen completionError={null} onRetryCompletion={vi.fn()} />,
-     );
- 
--    expect(html).toContain("Run Ollama");
-+    expect(html).toContain("运行 Ollama");
-     expect(html).toContain(FIRST_MODEL_COMMAND);
-     expect(html).not.toContain("Finish");
-     expect(html).not.toContain("Sign in");
-@@ -847,7 +847,7 @@ describe("Onboarding", () => {
-       />,
-     );
- 
--    expect(html).toContain("Finish in your browser…");
-+    expect(html).toContain("在浏览器中完成…");
-     expect(html).not.toContain("Waiting for sign in…");
-   });
- 
-@@ -862,6 +862,6 @@ describe("Onboarding", () => {
- 
-     expect(html).toContain("Unable to save setup. Please try again.");
-     expect(html).toContain('role="alert"');
--    expect(html).toContain("Try again");
-+    expect(html).toContain("重试");
-   });
- });
+warning: in the working copy of 'app/ui/app/src/components/Onboarding.tsx', LF will be replaced by CRLF the next time Git touches it
 diff --git a/app/ui/app/src/components/Onboarding.tsx b/app/ui/app/src/components/Onboarding.tsx
-index 4c93fe1..ab465b8 100644
+index 0941865..8be189d 100644
 --- a/app/ui/app/src/components/Onboarding.tsx
 +++ b/app/ui/app/src/components/Onboarding.tsx
 @@ -147,18 +147,18 @@ function OnboardingCard({ children }: { children: ReactNode }) {
@@ -1015,7 +835,7 @@ index 4c93fe1..ab465b8 100644
              size="md"
 -            title="Copy command to clipboard"
 +            title="复制命令到剪贴板"
-             className="shrink-0 text-neutral-400 hover:!bg-transparent hover:!text-neutral-400 dark:hover:!bg-transparent"
+             className="shrink-0 text-neutral-400 hover:!bg-transparent hover:!text-neutral-400"
            />
          </div>
  
@@ -1037,18 +857,18 @@ index 4c93fe1..ab465b8 100644
          )}
        </OnboardingCard>
      </main>
-@@ -394,9 +384,7 @@ export function ClaudeConnectedIntro({ onDone }: { onDone: () => void }) {
+@@ -403,9 +393,7 @@ export function ClaudeConnectedIntro({ onDone }: { onDone: () => void }) {
            <h2
              id="claude-connected-title"
-             className="font-rounded text-lg font-medium leading-6 text-neutral-950"
+             className="font-rounded text-lg font-medium leading-6 text-neutral-950 dark:text-neutral-100"
 -          >
 -            Easily access Ollama models in your Claude
 -          </h2>
 +          >在 Claude 中轻松使用 Ollama 模型</h2>
            <p
              id="claude-connected-description"
-             className="mt-2 text-[13px] leading-5 text-neutral-500"
-@@ -692,7 +680,7 @@ export function ConnectAppsScreen({
+             className="mt-2 text-[13px] leading-5 text-neutral-500 dark:text-neutral-400"
+@@ -701,7 +689,7 @@ export function ConnectAppsScreen({
          if (status.running) {
            setClaudePhase("idle");
            setClaudeError(
@@ -1057,7 +877,7 @@ index 4c93fe1..ab465b8 100644
            );
            return;
          }
-@@ -909,11 +897,11 @@ export function ConnectAppsScreen({
+@@ -918,11 +906,11 @@ export function ConnectAppsScreen({
        : claudePhase === "waiting-for-install"
          ? "Finish installing…"
          : claudePhase === "connecting"
@@ -1071,7 +891,7 @@ index 4c93fe1..ab465b8 100644
                : !claudeConfigured && !claudeInstalled
                  ? "Download & connect"
                  : null;
-@@ -950,7 +938,7 @@ export function ConnectAppsScreen({
+@@ -961,7 +949,7 @@ export function ConnectAppsScreen({
                  ? `${item.name} command copied`
                  : `Copy ${item.name} command`
              }
@@ -1080,7 +900,7 @@ index 4c93fe1..ab465b8 100644
            >
              {copied ? (
                <CheckIcon className="h-4 w-4 text-green-600" />
-@@ -982,7 +970,7 @@ export function ConnectAppsScreen({
+@@ -993,7 +981,7 @@ export function ConnectAppsScreen({
                    : claudePhase === "waiting-for-install"
                      ? "Finish installing Claude. Ollama will connect it automatically."
                      : claudePhase === "connecting"
@@ -1089,7 +909,7 @@ index 4c93fe1..ab465b8 100644
                        : claudePhase === "launching"
                          ? "Opening Claude…"
                          : claudePhase === "disconnecting"
-@@ -1011,12 +999,12 @@ export function ConnectAppsScreen({
+@@ -1022,12 +1010,12 @@ export function ConnectAppsScreen({
            aria-busy={isConnectingClaude || undefined}
            aria-label={
              claudeConfigured
@@ -1105,7 +925,199 @@ index 4c93fe1..ab465b8 100644
 +          title={claudeConfigured ? "断开连接" : "连接"}
            disabled={isConnectingClaude}
            onClick={connectClaude}
-           className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500 disabled:cursor-wait disabled:opacity-50 ${claudeToggleConfigured ? "bg-neutral-950" : "bg-neutral-300"}`}
+           className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500 disabled:cursor-wait disabled:opacity-50 ${claudeToggleConfigured ? "bg-neutral-950 dark:bg-white" : "bg-neutral-300 dark:bg-neutral-700"}`}
+
+diff --git a/app/ui/app/src/components/Onboarding.test.tsx b/app/ui/app/src/components/Onboarding.test.tsx
+index ff043f1..b67fb58 100644
+--- a/app/ui/app/src/components/Onboarding.test.tsx
++++ b/app/ui/app/src/components/Onboarding.test.tsx
+@@ -38,15 +38,15 @@ describe("Onboarding", () => {
+     expect(html).toContain(
+       "Run open models with your coding agents so you can spend less while keeping your data private.",
+     );
+-    expect(html.indexOf("Connect your apps")).toBeLessThan(
+-      html.indexOf("Easily switch models"),
++    expect(html.indexOf("连接你的应用")).toBeLessThan(
++      html.indexOf("轻松切换模型"),
+     );
+-    expect(html.indexOf("Easily switch models")).toBeLessThan(
+-      html.indexOf("Your data stays yours"),
++    expect(html.indexOf("轻松切换模型")).toBeLessThan(
++      html.indexOf("你的数据只属于你"),
+     );
+-    expect(html).toContain("Power your existing coding apps with open models");
+-    expect(html).toContain("Swap between frontier models in one click.");
+-    expect(html).toContain("Your prompt data is never logged or trained on.");
++    expect(html).toContain("用开源模型为你的编码应用赋能");
++    expect(html).toContain("一键切换前沿模型。");
++    expect(html).toContain("你的提示词数据不会被记录或用于训练。");
+     expect(html).toContain("Continue");
+     expect(html).not.toContain("Skip");
+   });
+@@ -82,7 +82,7 @@ describe("Onboarding", () => {
+             {
+               id: "claude",
+               name: "Claude Code",
+-              description: "Anthropic's coding tool with subagents",
++              description: "Anthropic 的编码工具(支持子代理)",
+               command: "ollama launch claude",
+             },
+           ]}
+@@ -462,8 +462,8 @@ describe("Onboarding", () => {
+     );
+ 
+     expect(html).toContain("Welcome to Ollama");
+-    expect(html).not.toContain("Run Ollama");
+-    expect(html).not.toContain("Sign up");
++    expect(html).not.toContain("运行 Ollama");
++    expect(html).not.toContain("注册");
+   });
+ 
+   it("groups disconnected Claude with a scrollable terminal list", () => {
+@@ -478,7 +478,7 @@ describe("Onboarding", () => {
+       {
+         id: "claude",
+         name: "Claude Code",
+-        description: "Anthropic's coding tool with subagents",
++        description: "Anthropic 的编码工具(支持子代理)",
+         installed: true,
+         action: "copy",
+         command: "ollama launch claude",
+@@ -486,7 +486,7 @@ describe("Onboarding", () => {
+       {
+         id: "codex",
+         name: "Codex",
+-        description: "OpenAI's open-source coding agent",
++        description: "OpenAI 的开源编码代理",
+         installed: true,
+         action: "copy",
+         command: "ollama launch codex",
+@@ -494,7 +494,7 @@ describe("Onboarding", () => {
+       {
+         id: "openclaw",
+         name: "OpenClaw",
+-        description: "Personal AI with 100+ skills",
++        description: "拥有 100+ 技能的个人 AI",
+         installed: true,
+         action: "copy",
+         command: "ollama launch openclaw",
+@@ -502,7 +502,7 @@ describe("Onboarding", () => {
+       {
+         id: "opencode",
+         name: "OpenCode",
+-        description: "Anomaly's open-source coding agent",
++        description: "Anomaly 的开源编码代理",
+         installed: false,
+         action: "copy",
+         command: "ollama launch opencode",
+@@ -518,7 +518,7 @@ describe("Onboarding", () => {
+       {
+         id: "dsh",
+         name: "DeepSeek Harness",
+-        description: "DeepSeek's open-source agent harness",
++        description: "DeepSeek 的开源代理框架",
+         installed: false,
+         action: "copy",
+         command: "ollama launch dsh",
+@@ -567,7 +567,7 @@ describe("Onboarding", () => {
+     expect(html).toContain("ollama launch claude");
+     expect(html).not.toContain("Installed");
+     expect(html).not.toContain("Not installed");
+-    expect(html).toContain('aria-label="Connect Claude"');
++    expect(html).toContain('aria-label="连接 Claude"');
+     expect(html).toContain('role="switch"');
+     expect(html).toContain('aria-checked="false"');
+     expect(html).not.toContain("Inactive");
+@@ -576,7 +576,7 @@ describe("Onboarding", () => {
+     expect(html).toContain("bg-transparent");
+     expect(html).toContain('aria-label="Copy OpenCode command"');
+     expect(html).toContain('aria-label="Copy Terminal command"');
+-    expect(html).not.toContain(">Copy command</button>");
++    expect(html).not.toContain(">复制命令</button>");
+     expect(html).not.toContain("ChatGPT");
+     expect(html).toContain("OpenCode");
+     expect(html).toContain("Terminal");
+@@ -601,7 +601,7 @@ describe("Onboarding", () => {
+     expect(html).not.toContain("Launch command");
+     expect(html).not.toContain('aria-pressed="true"');
+     expect(html).not.toContain("Continue");
+-    expect(html).not.toContain("Run Ollama");
++    expect(html).not.toContain("运行 Ollama");
+     expect(html).not.toContain('viewBox="0 0 3400 3400"');
+   });
+ 
+@@ -631,7 +631,7 @@ describe("Onboarding", () => {
+           {
+             id: "codex",
+             name: "Codex",
+-            description: "OpenAI's open-source coding agent",
++            description: "OpenAI 的开源编码代理",
+             installed: true,
+             action: "copy",
+             command: "ollama launch codex",
+@@ -646,7 +646,7 @@ describe("Onboarding", () => {
+     expect(html).not.toContain("Active");
+     expect(html).not.toContain("Inactive");
+     expect(html).toContain('aria-checked="true"');
+-    expect(html).toContain('aria-label="Disconnect Claude"');
++    expect(html).toContain('aria-label="断开 Claude 连接"');
+     expect(html).toContain("Connected to Ollama · 12 requests this session");
+   });
+ 
+@@ -684,7 +684,7 @@ describe("Onboarding", () => {
+     expect(html).toContain('role="alert"');
+     expect(html).not.toContain("text-red");
+     expect(html).toContain('aria-checked="true"');
+-    expect(html).toContain('aria-label="Disconnect Claude"');
++    expect(html).toContain('aria-label="断开 Claude 连接"');
+   });
+ 
+   it("keeps Claude model management off the Connect Apps page", () => {
+@@ -754,7 +754,7 @@ describe("Onboarding", () => {
+     );
+ 
+     expect(html).toContain("Use Ollama models in Claude Desktop");
+-    expect(html).toContain('aria-label="Connect Claude"');
++    expect(html).toContain('aria-label="连接 Claude"');
+     expect(html).toContain("Download &amp; connect");
+     expect(html).not.toContain("Inactive");
+     expect(html).not.toContain("Not installed");
+@@ -823,7 +823,7 @@ describe("Onboarding", () => {
+       "Create your account for access to faster, larger open models.",
+     );
+     expect(html).toContain("Your data is never logged or trained on.");
+-    expect(html).toContain("Sign up");
++    expect(html).toContain("注册");
+     expect(html).toContain("No thanks, I&#x27;ll use Ollama locally");
+     expect(html).toContain("Sign in");
+     expect(html).not.toContain("Skip");
+@@ -854,7 +854,7 @@ describe("Onboarding", () => {
+       <RunOllamaScreen completionError={null} onRetryCompletion={vi.fn()} />,
+     );
+ 
+-    expect(html).toContain("Run Ollama");
++    expect(html).toContain("运行 Ollama");
+     expect(html).toMatch(/<main class="light-only [^"]*bg-white/);
+     expect(html).toContain(FIRST_MODEL_COMMAND);
+     expect(html).not.toContain("Finish");
+@@ -874,7 +874,7 @@ describe("Onboarding", () => {
+       />,
+     );
+ 
+-    expect(html).toContain("Finish in your browser…");
++    expect(html).toContain("在浏览器中完成…");
+     expect(html).not.toContain("Waiting for sign in…");
+   });
+ 
+@@ -889,6 +889,6 @@ describe("Onboarding", () => {
+ 
+     expect(html).toContain("Unable to save setup. Please try again.");
+     expect(html).toContain('role="alert"');
+-    expect(html).toContain("Try again");
++    expect(html).toContain("重试");
+   });
+ });
+
 diff --git a/app/ui/app/src/components/Settings.interaction.test.tsx b/app/ui/app/src/components/Settings.interaction.test.tsx
 index f6683a6..a31cee1 100644
 --- a/app/ui/app/src/components/Settings.interaction.test.tsx
