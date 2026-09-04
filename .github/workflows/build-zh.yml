@@ -9,7 +9,7 @@
 
 name: Build Ollama Hanhua
 
-# 项目已停更(2026-08-30):定时构建已禁用,仅保留 workflow_dispatch 手动触发
+# Fork 接管版:恢复每日定时检测上游新版本
 on:
   workflow_dispatch:
     inputs:
@@ -17,13 +17,12 @@ on:
         description: "Ollama 上游版本号(如 v0.33.2),留空则自动检测最新版"
         required: false
         default: ""
-  # schedule:
-  #   - cron: "0 4 * * *"  # 已停更,定时构建禁用
-  # push:
-  #   branches: [master]  # 已停更,push 触发禁用
+  schedule:
+    - cron: "0 4 * * *"  # 每天 UTC 04:00(北京 12:00)检测上游新版本
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: build-zh
@@ -208,3 +207,46 @@ jobs:
           overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 构建失败时自动创建 Issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ver = '${{ steps.version.outputs.VERSION }}' || '未知版本';
+            const runUrl = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}';
+            const title = `[build-fail] 上游 ${ver} 自动构建失败`;
+            const body = [
+              `上游版本: **${ver}**`,
+              `失败运行: ${runUrl}`,
+              '',
+              '最可能的原因:',
+              '- 上游改动了界面代码,`translations/zh-CN.patch` 的 hunk 无法应用;',
+              '- 上游新增了词典未覆盖的新英文串(构建能过,但需要对照 extract_strings.py 的输出补词典);',
+              '- CI 环境偶发网络失败(重跑一次通常可恢复)。',
+              '',
+              '修复入口: 更新 `translations/zh-CN.json` 或 `tools/translate.mjs` 的 specialRules,重新生成 `translations/zh-CN.patch` 后推送。',
+            ].join('\n');
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const dup = existing.data.find((i) => i.title === title);
+            if (dup) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: dup.number,
+                body: `再次失败(${new Date().toISOString()}): ${runUrl}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['build-fail'],
+              });
+            }

@@ -1,0 +1,18 @@
+name: Keepalive
+
+# GitHub 会对 60 天无活动的仓库自动禁用定时 workflow。
+# 每周做一次空提交保持仓库活跃,保证 build-zh 的每日检测不被关掉。
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2
